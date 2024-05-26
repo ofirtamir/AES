@@ -28,7 +28,7 @@ def main():
             if mode: #need to encrypt
                 output_segment = encrypt(encrypt(segment_matrix,key_matrix1),key_matrix2)
             else: #need to decrypt
-                output_segment = decrypt(decrypt(segment_matrix,key_matrix1),key_matrix2)
+                output_segment = decrypt(decrypt(segment_matrix,key_matrix2),key_matrix1)
             for inner_list in output_segment:
                 output_file.write(bytearray(inner_list))
 
@@ -106,9 +106,11 @@ def shift_rows(input_msg):
     output_matrix = [[0] * 4 for _ in range(4)]
     for i in range(4):
         for j in range(4):
-            output_matrix[i][j-row_shift] = input_msg[i][j]
+            if mode:
+                output_matrix[i][j-row_shift] = input_msg[i][j]
+            else:
+                output_matrix[i][j] = input_msg[i][j - row_shift]
         row_shift += 1
-
     return output_matrix
 
 def rotate_column(input_msg):
